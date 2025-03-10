@@ -10,7 +10,7 @@ const Sidebar = () => {
    const data={node_id:node_id,
       label:label
     }
-    e.dataTransfer.setData('text',JSON.stringify(data))
+    e.dataTransfer.setData('node',JSON.stringify(data))
   }
 
   return (

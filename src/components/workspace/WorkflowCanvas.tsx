@@ -1,66 +1,76 @@
 import { v4 as uuidv4 } from "uuid";
-import '@xyflow/react/dist/style.css';
-import React, { useCallback } from 'react';
-import { addEdge, Background, BackgroundVariant, Connection, Controls, MiniMap,ReactFlow, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react';
+import "@xyflow/react/dist/style.css";
+import React, { useCallback } from "react";
+import {
+  addEdge,
+  applyNodeChanges,
+  Background,
+  BackgroundVariant,
+  Connection,
+  Controls,
+  MiniMap,
+  OnNodesChange,
+  ReactFlow,
+  useEdgesState,
+  useReactFlow,
+} from "@xyflow/react";
 
-import StartNode from './nodes/StartNode';
-import ProcessNode from './nodes/ProcessNode';
-import DecisionNode from './nodes/DecisionNode';
-
- 
+import StartNode from "./nodes/StartNode";
+import ProcessNode from "./nodes/ProcessNode";
+import DecisionNode from "./nodes/DecisionNode";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../store/store";
+import { addNode, setNodes } from "../../store/nodesSlice";
 
 const nodeTypes = {
   start: StartNode,
   process: ProcessNode,
   decision: DecisionNode,
 };
- 
-const initialNodes = [
-  { id: "1", type: "start", position: { x: 0, y: 0 }, data: { label: "Start" } },
-  { id: "2", type: "process", position: { x: 100, y: 200 }, data: { label: "Process 1" } },
-  { id: "3", type: "decision", position: { x: 400, y: 200 }, data: { label: "Decision" } },
-];
 
-const initialEdges = [
-  { id: 'e1-2', source: '1', target: '2' },
-];
+const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
 export default function WorkflowCanvas() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const dispatch = useDispatch<AppDispatch>();
+  const nodes = useSelector((store: RootState) => store.nodes.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const {screenToFlowPosition}=useReactFlow()
-  const addNode=(type:string,label:string,x:number,y:number)=>{
-    const id = uuidv4();
-    const node={id:id,type:type,position:{x:x,y:y},data:{label:label}}
   
-    setNodes(prev=>[...prev,node])
-  }  
+  const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
+
+  const onNodesChange: OnNodesChange = (changes) => {  // drag nodes
+    dispatch(setNodes(applyNodeChanges(changes, nodes)));
+  };
+
+
   const onConnect = useCallback(
-    (params:Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
   );
 
- const handleDrop=(e:React.DragEvent)=>{
-   // Get mouse position
-   e.preventDefault();
-  const data = e.dataTransfer.getData("text");
-  const position = screenToFlowPosition({ x: e.clientX, y: e.clientY});
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("node");
+    const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
+    const { label, node_id } = JSON.parse(data);
+    const id = uuidv4(); //unique id
+    const node = {
+      id: id,
+      type: node_id,
+      position: { x: position.x, y: position.y },
+      data: { label: label, id: id },
+    };
+    dispatch(addNode(node));
+  };
 
-const {label,node_id}=(JSON.parse(data))
-  addNode(node_id,label,position.x,position.y)
-  }
-  function allowDrop(ev:React.DragEvent) {
+  function allowDrop(ev: React.DragEvent) {
     ev.preventDefault();
   }
 
-
-
   return (
-
-    <div className='bg-amber-200 ' style={{ height: '100vh',width:'100vw' }}  >
-      <ReactFlow 
-      onDrop={handleDrop}
-      onDragOver={allowDrop}
+    <div className="bg-amber-200 " style={{ height: "100vh", width: "100vw" }}>
+      <ReactFlow
+        onDrop={handleDrop}
+        onDragOver={allowDrop}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -73,10 +83,6 @@ const {label,node_id}=(JSON.parse(data))
         <MiniMap />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
-
-
     </div>
-
-    
   );
 }
