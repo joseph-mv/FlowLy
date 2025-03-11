@@ -1,4 +1,6 @@
+import { Data } from "../store/types";
+
 export type NodeProps = {
-    data: { id:string, label: string };
+    data:Data & {id:string}
    
   };

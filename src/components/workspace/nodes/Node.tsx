@@ -11,9 +11,13 @@ const Node:React.FC<NodeProps> = ({data}) => {
       dispatch(removeNode(data.id))
       }
   return (
+    <div>
     <button onClick={handleDelete}>
       ❌
      </button>
+<p>{data.description}</p>
+
+    </div>
   )
 }
 

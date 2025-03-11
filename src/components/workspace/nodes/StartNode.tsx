@@ -1,11 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import Node from "./Node";
 import { NodeProps } from "../../../types/component";
 
 
-const StartNode: React.FC<NodeProps> = ({ data }) => {
-
+const StartNode: React.FC<NodeProps> = memo(({ data }) => {
 
   return (
     <div  className="bg-white border-2 border-black text-black px-4 py-2 rounded-md shadow-md ">
@@ -20,6 +19,6 @@ const StartNode: React.FC<NodeProps> = ({ data }) => {
       <Handle type="source" position={Position.Right} />
     </div>
   );
-};
+})
 
 export default StartNode;

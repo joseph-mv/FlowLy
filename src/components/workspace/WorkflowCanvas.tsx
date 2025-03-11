@@ -9,6 +9,8 @@ import {
   Connection,
   Controls,
   MiniMap,
+  Node,
+  NodeMouseHandler,
   OnNodesChange,
   ReactFlow,
   useEdgesState,
@@ -20,7 +22,8 @@ import ProcessNode from "./nodes/ProcessNode";
 import DecisionNode from "./nodes/DecisionNode";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { addNode, setNodes } from "../../store/nodesSlice";
+import { addNode, setNodes, setSelectedNode } from "../../store/nodesSlice";
+import NodePanel from "./NodePanel";
 
 const nodeTypes = {
   start: StartNode,
@@ -32,7 +35,7 @@ const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
 
 export default function WorkflowCanvas() {
   const dispatch = useDispatch<AppDispatch>();
-  const nodes = useSelector((store: RootState) => store.nodes.nodes);
+  const{ nodes ,selectedNode} = useSelector((store: RootState) => store.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   
   const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
@@ -65,6 +68,9 @@ export default function WorkflowCanvas() {
   function allowDrop(ev: React.DragEvent) {
     ev.preventDefault();
   }
+ const onNodeClick:NodeMouseHandler=( _, node: Node )=>{
+dispatch(setSelectedNode(node))
+  }
 
   return (
     <div className="bg-amber-200 " style={{ height: "100vh", width: "100vw" }}>
@@ -77,8 +83,10 @@ export default function WorkflowCanvas() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onNodeClick={onNodeClick}
         fitView
       >
+       {selectedNode &&  <NodePanel/>}
         <Controls />
         <MiniMap />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />

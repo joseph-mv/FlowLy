@@ -14,7 +14,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="w-1/4 p-4 bg-gray-100">
+    <div className="w-1/4 p-4 bg-gray-100 max-w-60">
     <h2 className="text-lg font-semibold mb-4">Nodes</h2>
 
     {nodeTypes.map((node) => (
