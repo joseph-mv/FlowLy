@@ -24,6 +24,7 @@ const nodesSlice = createSlice({
     },
     setNodes: (state, action: PayloadAction<Node[]>) => {
       state.nodes = action.payload;
+      console.log(action.payload)
     },
     setSelectedNode: (state, action: PayloadAction<Node | null>) => {
    
@@ -34,7 +35,7 @@ const nodesSlice = createSlice({
       
         state.selectedNode.data=action.payload
       const index=state.nodes.findIndex((node)=>node.id===state.selectedNode?.id)
-        state.nodes[index]=state.selectedNode
+        state.nodes[index].data=action.payload
       }
     }
   },

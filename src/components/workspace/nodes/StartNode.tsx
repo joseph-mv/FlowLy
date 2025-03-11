@@ -1,24 +1,21 @@
-import React, { memo } from "react";
+import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import Node from "./Node";
-import { NodeProps } from "../../../types/component";
+import withStyle from "./withNode";
+import { CirclePlay } from "lucide-react";
 
-
-const StartNode: React.FC<NodeProps> = memo(({ data }) => {
-
+const StartNode: React.FC= () => {
   return (
-    <div  className="bg-white border-2 border-black text-black px-4 py-2 rounded-md shadow-md ">
-    
-     <Node data={data}/>
-      🔵 {data.label}
+    <>
+    <CirclePlay size={15}  className="absolute top-0 left-0 "/>
       <Handle
-        type="target"
+        type="source"
         className="!bg-gray-300  !border-black   hover:scale-110 hover:!bg-black transition-transform"
-        position={Position.Left}
+        position={Position.Bottom}
       />
       <Handle type="source" position={Position.Right} />
-    </div>
+    </>
   );
-})
-
-export default StartNode;
+};
+const className="bg-white text-black"
+const Start = withStyle(StartNode,className);
+export default Start;

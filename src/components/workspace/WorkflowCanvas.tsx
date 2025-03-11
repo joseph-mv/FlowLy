@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { addNode, setNodes, setSelectedNode } from "../../store/nodesSlice";
 import NodePanel from "./NodePanel";
+import { NodeType } from "../../types/component";
 
 const nodeTypes = {
   start: StartNode,
@@ -52,15 +53,15 @@ export default function WorkflowCanvas() {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    const data = e.dataTransfer.getData("node");
+    const data = e.dataTransfer.getData("nodeType");
     const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
-    const { label, node_id } = JSON.parse(data);
+    const nodeType:NodeType = JSON.parse(data) ;
     const id = uuidv4(); //unique id
     const node = {
       id: id,
-      type: node_id,
+      type: nodeType.type,
       position: { x: position.x, y: position.y },
-      data: { label: label, id: id },
+      data: { ...nodeType, id: id },
     };
     dispatch(addNode(node));
   };
