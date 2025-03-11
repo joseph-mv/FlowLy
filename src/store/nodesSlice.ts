@@ -24,10 +24,8 @@ const nodesSlice = createSlice({
     },
     setNodes: (state, action: PayloadAction<Node[]>) => {
       state.nodes = action.payload;
-      console.log(action.payload)
     },
-    setSelectedNode: (state, action: PayloadAction<Node | null>) => {
-   
+    setSelectedNode: (state, action: PayloadAction<Node | null>) => {  
       state.selectedNode = action.payload;
     },
     updateSelectedNode:(state,action:PayloadAction<Data>)=>{
@@ -37,9 +35,12 @@ const nodesSlice = createSlice({
       const index=state.nodes.findIndex((node)=>node.id===state.selectedNode?.id)
         state.nodes[index].data=action.payload
       }
+    },
+    resetNodes:()=>{
+      return initialState
     }
   },
 });
 
-export const { addNode, removeNode, setNodes,setSelectedNode,updateSelectedNode } = nodesSlice.actions;
+export const { addNode, removeNode, setNodes,setSelectedNode,updateSelectedNode,resetNodes } = nodesSlice.actions;
 export default nodesSlice.reducer;

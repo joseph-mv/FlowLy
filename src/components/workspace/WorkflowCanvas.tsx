@@ -32,19 +32,19 @@ const nodeTypes = {
   decision: DecisionNode,
 };
 
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-
 export default function WorkflowCanvas() {
   const dispatch = useDispatch<AppDispatch>();
-  const{ nodes ,selectedNode} = useSelector((store: RootState) => store.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  
+  const { nodes, selectedNode } = useSelector(
+    (store: RootState) => store.nodes
+  );
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
   const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
 
-  const onNodesChange: OnNodesChange = (changes) => {  // drag nodes
+  const onNodesChange: OnNodesChange = (changes) => {
+    // drag nodes
     dispatch(setNodes(applyNodeChanges(changes, nodes)));
   };
-
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -55,7 +55,7 @@ export default function WorkflowCanvas() {
     e.preventDefault();
     const data = e.dataTransfer.getData("nodeType");
     const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
-    const nodeType:NodeType = JSON.parse(data) ;
+    const nodeType: NodeType = JSON.parse(data);
     const id = uuidv4(); //unique id
     const node = {
       id: id,
@@ -69,9 +69,9 @@ export default function WorkflowCanvas() {
   function allowDrop(ev: React.DragEvent) {
     ev.preventDefault();
   }
- const onNodeClick:NodeMouseHandler=( _, node: Node )=>{
-dispatch(setSelectedNode(node))
-  }
+  const onNodeClick: NodeMouseHandler = (_, node: Node) => {
+    dispatch(setSelectedNode(node));
+  };
 
   return (
     <div className="bg-amber-200 " style={{ height: "100vh", width: "100vw" }}>
@@ -87,7 +87,7 @@ dispatch(setSelectedNode(node))
         onNodeClick={onNodeClick}
         fitView
       >
-       {selectedNode &&  <NodePanel/>}
+        {selectedNode && <NodePanel />}
         <Controls />
         <MiniMap />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
