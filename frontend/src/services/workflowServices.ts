@@ -6,9 +6,10 @@ type Data = { name: string; nodes: Node[]; edges: Edge[] };
 export const createWorkspace = async (data: Data) => {
   try {
     const response = await apiClient.post("workflow/create/", data);
-    console.log(response);
+    return response.data
   } catch (error) {
     console.log(error);
+    return null
   }
 };
 
@@ -18,5 +19,18 @@ export const getWorkList=async()=>{
         return response.data
       } catch (error) {
         console.log(error);
+        return null
       }
+}
+
+export const removeWorkFlow=async(id:number)=>{
+  try {
+      const response = await apiClient.delete(`workflow/remove/${id}`);
+      return response.data
+    } catch (error ) {
+      console.log(error);
+      return null
+      // return error.response?.data.error ;
+      
+    }
 }

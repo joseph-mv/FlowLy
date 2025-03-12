@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Workspace from "./pages/WorkSpace";
 import Layout from './components/layout/Layout';
 import  WorkflowList  from "./pages/WorkFlowList";
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -13,6 +14,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Layout>
+      <ToastContainer/>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/workspace" element={<Workspace/>} />

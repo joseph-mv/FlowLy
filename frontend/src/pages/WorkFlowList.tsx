@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import {  ChevronLeft, ChevronRight } from 'lucide-react';
 import { getWorkList } from '../services/workflowServices';
-
-interface Workflow {
-  id: number;
-  name: string;
-  created_at: string;
-}
+import WorkFlow from '../components/workflowList/WorkFlow';
+import { Workflow } from '../types/component';
 
 
 const ITEMS_PER_PAGE = 5;
@@ -34,15 +30,7 @@ const WorkflowList=()=> {
   }, []);
   
 
-  const handleEdit = (id: number) => {
-    console.log(`Edit workflow ${id}`);
-    // Implement edit functionality
-  };
 
-  const handleDelete = (id: number) => {
-    console.log(`Delete workflow ${id}`);
-    // Implement delete functionality
-  };
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 min-h-[80vh]">
@@ -59,29 +47,7 @@ const WorkflowList=()=> {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {currentWorkflows.map((workflow) => (
-              <tr key={workflow.id} className="hover:bg-gray-50">
-                <td className=" px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {workflow.name}
-                </td>
-             
-                <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(workflow.created_at).toLocaleDateString()}
-                </td>
-                <td className=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
-                    onClick={() => handleEdit(workflow.id)}
-                    className="text-indigo-600 hover:text-indigo-900 mr-4"
-                  >
-                    <Pencil className="h-5 w-5 inline" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(workflow.id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    <Trash2 className="h-5 w-5 inline" />
-                  </button>
-                </td>
-              </tr>
+              <WorkFlow workflow={workflow} setWorkflows={setWorkflows} />
             ))}
           </tbody>
         </table>
