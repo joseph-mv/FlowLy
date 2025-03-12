@@ -8,11 +8,11 @@ import { createWorkspace } from "../../services/workflowServices";
 const SaveForm = () => {
   const dispatch=useDispatch<AppDispatch>()
     const [name, setName] = useState("");
-    const nodes=useSelector((store:RootState)=>store.nodes.nodes)
+    const{ nodes,edges}=useSelector((store:RootState)=>store.nodes)
 
     const handleSave = async(e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
-      const data={name,nodes,edges:[]}
+      const data={name,nodes,edges}
     await createWorkspace(data)
     };
     

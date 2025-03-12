@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Node } from "@xyflow/react";
+import { Edge, Node } from "@xyflow/react";
 import { Data } from "./types";
 
 interface NodesState {
   nodes: Node[];
+  edges:Edge[]
   selectedNode:Node | null
 }
 
 const initialState: NodesState = {
   nodes: [],
+  edges:[],
   selectedNode:null
 };
 
@@ -38,9 +40,13 @@ const nodesSlice = createSlice({
     },
     resetNodes:()=>{
       return initialState
-    }
+    },
+
+    setEdges: (state, action: PayloadAction<Edge[]>) => {
+      state.edges = action.payload;
+    },
   },
 });
 
-export const { addNode, removeNode, setNodes,setSelectedNode,updateSelectedNode,resetNodes } = nodesSlice.actions;
+export const { addNode, removeNode, setNodes,setSelectedNode,updateSelectedNode,resetNodes,setEdges } = nodesSlice.actions;
 export default nodesSlice.reducer;

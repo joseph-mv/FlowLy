@@ -13,7 +13,7 @@ import {
   NodeMouseHandler,
   OnNodesChange,
   ReactFlow,
-  useEdgesState,
+  // useEdgesState,
   useReactFlow,
 } from "@xyflow/react";
 
@@ -22,7 +22,7 @@ import ProcessNode from "./nodes/ProcessNode";
 import DecisionNode from "./nodes/DecisionNode";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { addNode, setNodes, setSelectedNode } from "../../store/nodesSlice";
+import { addNode, setEdges, setNodes, setSelectedNode } from "../../store/nodesSlice";
 import NodePanel from "./NodePanel";
 import { NodeType } from "../../types/component";
 
@@ -34,11 +34,11 @@ const nodeTypes = {
 
 export default function WorkflowCanvas() {
   const dispatch = useDispatch<AppDispatch>();
-  const { nodes, selectedNode } = useSelector(
+  const { nodes, selectedNode,edges } = useSelector(
     (store: RootState) => store.nodes
   );
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
+  // const [edges, setEdges] = useEdgesState([]);
+console.log(edges)
   const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
 
   const onNodesChange: OnNodesChange = (changes) => {
@@ -47,8 +47,8 @@ export default function WorkflowCanvas() {
   };
 
   const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
+    (params: Connection) => dispatch(setEdges(addEdge(params, edges)) ),
+    [edges]
   );
 
   const handleDrop = (e: React.DragEvent) => {
@@ -82,7 +82,7 @@ export default function WorkflowCanvas() {
         edges={edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        // onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onNodeClick={onNodeClick}
         fitView

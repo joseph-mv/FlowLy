@@ -28,8 +28,8 @@ function App() {
                   Create a Workspace
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>
-                <Link to='/works' className="inline-flex items-center px-6 py-3 rounded-full text-slate-700 bg-white hover:bg-slate-50 transition border border-slate-200 shadow-lg hover:shadow-xl">
-                  Your Works
+                <Link to='/works-flow-list' className="inline-flex items-center px-6 py-3 rounded-full text-slate-700 bg-white hover:bg-slate-50 transition border border-slate-200 shadow-lg hover:shadow-xl">
+                  Your Workflows
                   <Layers className="ml-2 w-5 h-5" />
                 </Link>
               </div>
