@@ -1,28 +1,42 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { resetNodes } from "../../store/nodesSlice";
-import { createWorkspace } from "../../services/workflowServices";
+import { resetWorkSpace, setName } from "../../store/nodesSlice";
+import {
+  createWorkFlow,
+  updateWorkFlow,
+} from "../../services/workflowServices";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const SaveForm = () => {
+type SaveFromProps = {
+  id: string | undefined;
+};
+
+const SaveForm: React.FC<SaveFromProps> = ({ id }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [name, setName] = useState("");
-  const { nodes, edges } = useSelector((store: RootState) => store.nodes);
+  const { name, nodes, edges } = useSelector((store: RootState) => store.nodes);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setName(e.target.value));
+  };
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = { name, nodes, edges };
-    const response = await createWorkspace(data);
+    const response = id
+      ? await updateWorkFlow(data, +id)
+      : await createWorkFlow(data);
     if (!response) {
       toast.error("Something went wrong!,please try again later");
       return;
     }
     toast.success(response.message);
+    navigate("/");
   };
 
   const handleReset = () => {
-    dispatch(resetNodes());
+    dispatch(resetWorkSpace());
     toast.success("Workspace reset successfully.");
   };
   return (
@@ -33,16 +47,21 @@ const SaveForm = () => {
           type="text"
           placeholder="Enter Your workflow name..."
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
 
         {/* Buttons */}
-
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
-          Save
-        </button>
+        {id ? (
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+            Update
+          </button>
+        ) : (
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+            Save
+          </button>
+        )}
       </form>
       <button
         onClick={handleReset}

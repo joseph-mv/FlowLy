@@ -3,6 +3,7 @@ import React from "react";
 import { Workflow } from "../../types/component";
 import { removeWorkFlow } from "../../services/workflowServices";
 import {  toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 type WorkFlowProps = {
   workflow: Workflow;
@@ -10,10 +11,6 @@ type WorkFlowProps = {
 };
 
 const WorkFlow: React.FC<WorkFlowProps> = ({ workflow,setWorkflows }) => {
-  const handleEdit = (id: number) => {
-    console.log(`Edit workflow ${id}`);
-  };
-
   const handleDelete = async(id: number) => {
    const response= await removeWorkFlow(id)
 
@@ -37,12 +34,12 @@ const WorkFlow: React.FC<WorkFlowProps> = ({ workflow,setWorkflows }) => {
         {new Date(workflow.created_at).toLocaleDateString()}
       </td>
       <td className=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <button
-          onClick={() => handleEdit(workflow.id)}
+        <Link 
+        to={`${workflow.id}/edit-workflow`}
           className="text-indigo-600 hover:text-indigo-900 mr-4"
         >
           <Pencil className="h-5 w-5 inline" />
-        </button>
+        </Link>
         <button
           onClick={() => handleDelete(workflow.id)}
           className="text-red-600 hover:text-red-900"

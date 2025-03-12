@@ -38,7 +38,6 @@ export default function WorkflowCanvas() {
     (store: RootState) => store.nodes
   );
   // const [edges, setEdges] = useEdgesState([]);
-console.log(edges)
   const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
 
   const onNodesChange: OnNodesChange = (changes) => {

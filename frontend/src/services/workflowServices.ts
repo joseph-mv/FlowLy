@@ -3,7 +3,7 @@ import { apiClient } from "./apiClient";
 
 type Data = { name: string; nodes: Node[]; edges: Edge[] };
 
-export const createWorkspace = async (data: Data) => {
+export const createWorkFlow = async (data: Data) => {
   try {
     const response = await apiClient.post("workflow/create/", data);
     return response.data
@@ -30,7 +30,27 @@ export const removeWorkFlow=async(id:number)=>{
     } catch (error ) {
       console.log(error);
       return null
-      // return error.response?.data.error ;
       
     }
 }
+
+export const getWorkFlow=async(id:number)=>{
+  try {
+      const response = await apiClient.get(`workflow/get/${id}`);
+      return response.data
+    } catch (error ) {
+      console.log(error);
+      return null
+      
+    }
+}
+
+export const updateWorkFlow = async (data: Data,id:number) => {
+  try {
+    const response = await apiClient.put(`workflow/update/${id}`, data);
+    return response.data
+  } catch (error) {
+    console.log(error);
+    return null
+  }
+};

@@ -19,6 +19,7 @@ export default function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/workspace" element={<Workspace/>} />
           <Route path="/works-flow-list" element={<WorkflowList/>} />
+          <Route path="/works-flow-list/:id/edit-workflow" element={<Workspace/>} />
 
       </Routes>
       </Layout>
