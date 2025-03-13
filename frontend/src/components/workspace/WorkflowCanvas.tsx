@@ -8,6 +8,9 @@ import {
   BackgroundVariant,
   Connection,
   Controls,
+  Edge,
+  EdgeMouseHandler,
+  MarkerType,
   MiniMap,
   Node,
   NodeMouseHandler,
@@ -22,9 +25,16 @@ import ProcessNode from "./nodes/ProcessNode";
 import DecisionNode from "./nodes/DecisionNode";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
-import { addNode, setEdges, setNodes, setSelectedNode } from "../../store/nodesSlice";
+import {
+  addNode,
+  setEdges,
+  setNodes,
+  setSelectedEdge,
+  setSelectedNode,
+} from "../../store/nodesSlice";
 import NodePanel from "./NodePanel";
 import { NodeType } from "../../types/component";
+import EdgePanel from "./EdgePanel";
 
 const nodeTypes = {
   start: StartNode,
@@ -34,10 +44,9 @@ const nodeTypes = {
 
 export default function WorkflowCanvas() {
   const dispatch = useDispatch<AppDispatch>();
-  const { nodes, selectedNode,edges } = useSelector(
+  const { nodes, selectedNode, edges,selectedEdge } = useSelector(
     (store: RootState) => store.nodes
   );
-  // const [edges, setEdges] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
 
   const onNodesChange: OnNodesChange = (changes) => {
@@ -45,8 +54,30 @@ export default function WorkflowCanvas() {
     dispatch(setNodes(applyNodeChanges(changes, nodes)));
   };
 
+  const defaultEdgeOptions={style: {
+    strokeWidth: 1,
+    strokeDasharray: "5,5", // Dashed line
+  },
+  type:"step",
+  interactionWidth: 10, // Increase clickable area
+  markerEnd: {
+    type: MarkerType.ArrowClosed, // Adds an arrow at the end
+    width: 20,
+    height: 20,
+  },
+
+  }
+
   const onConnect = useCallback(
-    (params: Connection) => dispatch(setEdges(addEdge(params, edges)) ),
+    (params: Connection) =>
+      dispatch(
+        setEdges(
+          addEdge(
+            params,
+            edges
+          )
+        )
+      ),
     [edges]
   );
 
@@ -72,6 +103,10 @@ export default function WorkflowCanvas() {
     dispatch(setSelectedNode(node));
   };
 
+  const onEdgeClick:EdgeMouseHandler=(_,edge:Edge)=>{
+    dispatch(setSelectedEdge(edge));
+  }
+
   return (
     <div className="bg-amber-200 " style={{ height: "100vh", width: "100vw" }}>
       <ReactFlow
@@ -81,12 +116,17 @@ export default function WorkflowCanvas() {
         edges={edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        // onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onNodeClick={onNodeClick}
+        onEdgeClick={onEdgeClick}
+        elevateEdgesOnSelect
+        defaultMarkerColor={"#b1b1b7"}
+        defaultEdgeOptions={defaultEdgeOptions}
         fitView
       >
         {selectedNode && <NodePanel />}
+        {selectedEdge && <EdgePanel />}
+
         <Controls />
         <MiniMap />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />

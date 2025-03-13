@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Edge, Node } from "@xyflow/react";
+import { Edge, MarkerType, Node } from "@xyflow/react";
 import { Data } from "./types";
 
 interface NodesState {
@@ -7,6 +7,8 @@ interface NodesState {
   nodes: Node[];
   edges: Edge[];
   selectedNode: Node | null;
+  selectedEdge: Edge | null;
+  
 }
 
 const initialState: NodesState = {
@@ -14,6 +16,7 @@ const initialState: NodesState = {
   nodes: [],
   edges: [],
   selectedNode: null,
+  selectedEdge:null
 };
 
 const nodesSlice = createSlice({
@@ -34,16 +37,35 @@ const nodesSlice = createSlice({
     },
     updateSelectedNode: (state, action: PayloadAction<Data>) => {
       if (state.selectedNode) {
-        state.selectedNode.data = action.payload;
         const index = state.nodes.findIndex(
           (node) => node.id === state.selectedNode?.id
         );
         state.nodes[index].data = action.payload;
       }
     },
-
     setEdges: (state, action: PayloadAction<Edge[]>) => {
       state.edges = action.payload;
+    },
+    setSelectedEdge: (state, action: PayloadAction<Edge | null>) => {
+      state.selectedEdge = action.payload;
+    },
+    updateSelectedEdge: (state, action: PayloadAction<{color:string,label:string}>) => {
+      if (state.selectedEdge) {
+        const {label,color}=action.payload
+        const index = state.edges.findIndex(
+          (edge) => edge.id === state.selectedEdge?.id
+        );
+        const edge=state.edges[index]
+        edge.label = label;
+        if(edge.style ){
+        edge.style.stroke=color
+      }
+      edge.markerEnd={color:color,type:MarkerType.ArrowClosed,width: 20,
+        height: 20,}
+      }
+    },
+    removeEdge: (state, action: PayloadAction<string>) => {
+      state.edges = state.edges.filter((edge) => edge.id !== action.payload);
     },
     setName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -62,6 +84,9 @@ export const {
   updateSelectedNode,
   resetWorkSpace,
   setEdges,
-  setName
+  setName,
+  setSelectedEdge,
+  updateSelectedEdge,
+  removeEdge
 } = nodesSlice.actions;
 export default nodesSlice.reducer;

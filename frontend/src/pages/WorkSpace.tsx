@@ -8,15 +8,19 @@ import { useEffect } from "react";
 import { getWorkFlow } from "../services/workflowServices";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
-import { resetWorkSpace, setEdges, setName, setNodes } from "../store/nodesSlice";
+import {
+  resetWorkSpace,
+  setEdges,
+  setName,
+  setNodes,
+} from "../store/nodesSlice";
 
 const Workspace = () => {
-  const { id } = useParams();
+  const { id } = useParams(); //editing existing workflow
   const dispatch = useDispatch<AppDispatch>();
 
-
   useEffect(() => {
-    if (!id) return;
+    if (!id) return; //new Workflow
 
     const fetchWorkflow = async () => {
       const response = await getWorkFlow(+id);
@@ -25,6 +29,7 @@ const Workspace = () => {
       dispatch(setName(response.name))
     };
     fetchWorkflow();
+  
 
     return () => {
       dispatch(resetWorkSpace());
@@ -33,7 +38,9 @@ const Workspace = () => {
 
   return (
     <>
-      <h1 className="text-center m-4">{id ? "Edit" :"Create"} your WorkFlow</h1>
+      <h1 className="text-center m-4">
+        {id ? "Edit" : "Create"} your WorkFlow
+      </h1>
       <div className="flex ">
         <Sidebar />
         <ReactFlowProvider>
