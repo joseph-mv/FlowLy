@@ -55,8 +55,9 @@ export default function WorkflowCanvas() {
   };
 
   const defaultEdgeOptions={style: {
+    stroke:'black',
     strokeWidth: 1,
-    strokeDasharray: "5,5", // Dashed line
+    strokeDasharray: "5,2", // Dashed line
   },
   type:"step",
   interactionWidth: 10, // Increase clickable area
@@ -64,6 +65,7 @@ export default function WorkflowCanvas() {
     type: MarkerType.ArrowClosed, // Adds an arrow at the end
     width: 20,
     height: 20,
+  color:'black'
   },
 
   }
@@ -108,7 +110,7 @@ export default function WorkflowCanvas() {
   }
 
   return (
-    <div className="bg-amber-200 " style={{ height: "100vh", width: "100vw" }}>
+    <div className="bg-gray-300 " style={{ height: "100vh", width: "100vw" }}>
       <ReactFlow
         onDrop={handleDrop}
         onDragOver={allowDrop}
@@ -127,9 +129,9 @@ export default function WorkflowCanvas() {
         {selectedNode && <NodePanel />}
         {selectedEdge && <EdgePanel />}
 
-        <Controls />
-        <MiniMap />
-        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        <Controls className="gap-1" />
+        <MiniMap className="max-w-[30vw]" />
+        <Background color="white" variant={BackgroundVariant.Dots} gap={12} size={1} />
       </ReactFlow>
     </div>
   );

@@ -17,7 +17,7 @@ const NodePanel = () => {
   const [description, setDescription] = useState(
     selectedNode?.data?.description as string
   );
-  const [color,setColor]=useState(selectedNode?.data.color as string)
+  const [color,setColor]=useState(selectedNode?.data.textColor as string)
   const [bgColor,setBgColor]=useState(selectedNode?.data?.bgColor as string)
 
   const handleSave = () => {

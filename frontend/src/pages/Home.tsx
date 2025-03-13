@@ -37,11 +37,11 @@ function App() {
 
             {/* Right Column - Illustration */}
             <div className="flex-1 w-full max-w-2xl lg:max-w-none">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative rounded-2xl  overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+                  src="/banner.png"
                   alt="Workflow Editor Interface"
-                  className="w-full h-auto rounded-2xl"
+                  className="w-full h-auto rounded-2xl brightness-70 contrast-200"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600/20 to-purple-600/20 mix-blend-multiply"></div>
               </div>

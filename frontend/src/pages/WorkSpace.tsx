@@ -41,7 +41,7 @@ const Workspace = () => {
       <h1 className="text-center m-4">
         {id ? "Edit" : "Create"} your WorkFlow
       </h1>
-      <div className="flex ">
+      <div className="flex md:flex-row flex-col">
         <Sidebar />
         <ReactFlowProvider>
           <WorkflowCanvas />
