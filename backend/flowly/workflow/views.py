@@ -24,7 +24,7 @@ def get_all(req):
     """Fetch all workflows with selected fields."""
 
     try:
-        workflows = Workflow.objects.values('id','name','created_at')
+        workflows = Workflow.objects.values('id','name','created_at').order_by('-created_at')  # last saved item at first
         return Response(workflows, status=status.HTTP_200_OK)   
     except Exception as e:
         print(f"Error fetching workflows: {str(e)}")
