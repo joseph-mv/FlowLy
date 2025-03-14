@@ -65,13 +65,19 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-
-
+CORS_ALLOW_CREDENTIALS = True # Allow sending cookies (sessions, auth, etc.)
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  # ✅ Required for session-based auth
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ]
 }
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default authentication
+]
 
 
 

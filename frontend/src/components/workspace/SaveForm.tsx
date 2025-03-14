@@ -16,6 +16,7 @@ const SaveForm: React.FC<SaveFromProps> = ({ id }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { name, nodes, edges } = useSelector((store: RootState) => store.nodes);
+  const {isAuthenticated}=useSelector((store:RootState)=>store.user)
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setName(e.target.value));
@@ -23,6 +24,11 @@ const SaveForm: React.FC<SaveFromProps> = ({ id }) => {
 
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if(!isAuthenticated) {
+      navigate('/authentication')
+      return
+    }
+
     const data = { name, nodes, edges };
     const response = id
       ? await updateWorkFlow(data, +id)
