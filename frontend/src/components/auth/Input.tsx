@@ -8,12 +8,18 @@ type InputProps = {
   onchange:React.Dispatch<React.SetStateAction<string>>
 }
 
-export function Input({ label, type, id, placeholder, required = false,onchange }: InputProps) {
+/**
+ * **Input Component**
+ * - A reusable input field with label support.
+ * - Handles state updates via `onChange` prop.
+ */
+export const Input:React.FC<InputProps>=({ label, type, id, placeholder, required = false,onchange })=> {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
+      
       <input
         type={type}
         id={id}

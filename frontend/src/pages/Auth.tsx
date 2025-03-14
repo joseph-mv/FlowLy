@@ -1,41 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { AuthLayout } from "../components/auth/AuthLayout";
+import { useAuth } from "../hooks/useAuth"
 import { Input } from "../components/auth/Input";
 import { Button } from "../components/auth/Button";
-import { login, signup } from "../services/authServices";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
-import { loginUser } from "../store/userSlice";
+import { AuthLayout } from "../components/auth/AuthLayout";
 
+/**
+ * **Authentication Page**
+ * - Provides a login/signup form.
+ * - Uses `useAuth` hook to handle authentication logic.
+ * - Displays input fields for name, email, and password.
+ * - Supports toggling between login and signup modes.
+ */
 const Auth = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
-  // Refs for each input field
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (isLogin) {
-        const response = await login({ name, password });
-        dispatch(loginUser(response.data));
-      } else {
-        const response = await signup({ name, email, password });
-        console.log(response);
-      }
-      navigate("/");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  useEffect(() => {
-    setError("");
-  }, [password, name, email, isLogin]);
+const {isLogin,handleSubmit,setName,setEmail,setPassword,error,setIsLogin}=useAuth()
 
   return (
     <AuthLayout

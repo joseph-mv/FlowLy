@@ -1,24 +1,24 @@
+import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import Home from "./pages/Home";
-import Workspace from "./pages/WorkSpace";
 import Layout from "./components/layout/Layout";
-import WorkflowList from "./pages/WorkFlowList";
-import { ToastContainer } from "react-toastify";
-import Auth from "./pages/Auth";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import { Auth, Home, WorkflowList, Workspace }  from "./pages";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Layout>
+        {/* Toast notifications for alerts and messages */}
         <ToastContainer />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/authentication" element={<Auth />} />
           <Route path="/workspace" element={<Workspace />} />
 
+          {/* Protected Routes (Only accessible by authenticated users) */}
           <Route
             path="/works-flow-list"
             element={

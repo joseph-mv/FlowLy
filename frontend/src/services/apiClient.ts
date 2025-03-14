@@ -1,6 +1,8 @@
 import axios from "axios";
 
-
+/**
+ * Retrieves the value of a specified cookie by name.
+ */
 function getCookie(name:string) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== "") {
@@ -13,15 +15,29 @@ function getCookie(name:string) {
           }
       }
   }
-  console.log(cookieValue)
   return cookieValue;
 }
 
+/** Create an Axios instance with default configuration */
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL, 
   headers: {
-    "X-CSRFToken": getCookie("csrftoken"),
     "Content-Type": "application/json",
   },
-
+    withCredentials: true // Allow cookies
 });
+
+/** 
+ * **Request Interceptor**  
+ * - Automatically adds CSRF token to every request if available.  
+ */
+apiClient.interceptors.request.use(
+  (config) => {
+    const csrfToken = getCookie("csrftoken");
+    if (csrfToken) {
+      config.headers["X-CSRFToken"] = csrfToken;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);

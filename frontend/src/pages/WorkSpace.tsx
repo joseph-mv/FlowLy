@@ -1,13 +1,13 @@
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { ReactFlowProvider } from "@xyflow/react";
 
-import Sidebar from "../components/workspace/Sidebar";
-import WorkflowCanvas from "../components/workspace/WorkflowCanvas";
-import SaveForm from "../components/workspace/SaveForm";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { getWorkFlow } from "../services/workflowServices";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
+import Sidebar from "../components/workspace/Sidebar";
+import SaveForm from "../components/workspace/SaveForm";
+import { getWorkFlow } from "../services/workflowServices";
+import WorkflowCanvas from "../components/workspace/WorkflowCanvas";
 import {
   resetWorkSpace,
   setEdges,
@@ -15,22 +15,29 @@ import {
   setNodes,
 } from "../store/nodesSlice";
 
+/**
+ * **Workspace Page**
+ * - Allows users to create or edit workflows.
+ * - Fetches workflow data if an `id` is present (editing mode).
+ * - Updates Redux store with workflow data.
+ * - Resets workspace state on unmount.
+ */
 const Workspace = () => {
-  const { id } = useParams(); //editing existing workflow
+  const { id } = useParams(); // Gets the workflow ID from URL parameters
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (!id) return; //new Workflow
+    if (!id) return; // If no ID, it's a new workflow, so no need to fetch
 
     const fetchWorkflow = async () => {
       const response = await getWorkFlow(+id);
       dispatch(setNodes(response.nodes));
       dispatch(setEdges(response.edges));
-      dispatch(setName(response.name))
+      dispatch(setName(response.name));
     };
     fetchWorkflow();
-  
 
+    // Cleanup function to reset workspace when component unmounts
     return () => {
       dispatch(resetWorkSpace());
     };
