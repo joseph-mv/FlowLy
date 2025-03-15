@@ -29,12 +29,6 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # Debug mode
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS = ["localhost", "127.0.0.1"] 
-# CSRF_TRUSTED_ORIGINS = [
-#     "http://localhost:5174",  # ✅ Allow your frontend React/Vite app
-#     "http://127.0.0.1:5174",
-# ]
-
 
 # Application definition
 
@@ -46,10 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'workflow',
+    'corsheaders',
     'rest_framework',
     
-    'corsheaders'
+    'workflow',
 
 ]
 
@@ -66,10 +60,10 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True # Allow sending cookies (sessions, auth, etc.)
-CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173","http://localhost:5174","http://localhost:5175"]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # ✅ Required for session-based auth
+        'rest_framework.authentication.SessionAuthentication',  #  Required for session-based auth
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
