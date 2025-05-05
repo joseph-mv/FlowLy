@@ -30,6 +30,7 @@ const SaveForm: React.FC<SaveFromProps> = ({ id }) => {
     }
 
     const data = { name, nodes, edges };
+    console.log(data)
     const response = id
       ? await updateWorkFlow(data, +id)
       : await createWorkFlow(data);

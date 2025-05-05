@@ -43,6 +43,28 @@ const nodesSlice = createSlice({
     },
 
     removeNode: (state, action: PayloadAction<string>) => {
+      const rmNode = state.nodes.find((node) => node.id == action.payload);
+
+      //Step 1: Check if the node to be removed exists
+      if (!rmNode) {
+        console.warn("Node to remove not found");
+        return;
+      }
+
+      // Step 2: Get its child node IDs safely
+      const childNodeIds =
+        (Array.isArray(rmNode.data?.childNodes) && rmNode.data?.childNodes) ||
+        [];
+
+      // Step 3:Clear prevNodes of all child nodes before removing the parent node
+      childNodeIds.forEach((childId: string) => {
+        const childNode = state.nodes.find((node) => node.id === childId);
+
+        if (childNode && childNode.data) {
+          childNode.data.prevNodes = [];
+        }
+      });
+
       state.nodes = state.nodes.filter((node) => node.id !== action.payload);
     },
 
@@ -102,6 +124,29 @@ const nodesSlice = createSlice({
       state.name = action.payload;
     },
 
+    getPrevNodes: (state, action: PayloadAction<string[]>) => {
+      const sourceId = action.payload[0];
+      const targetId = action.payload[1];
+      const targetNode = state.nodes.find((node) => node.id === targetId);
+      const sourceNode = state.nodes.find((node) => node.id === sourceId);
+
+      if (targetNode && sourceNode) {
+        // Ensure source's prevNodes is an array (fallback to empty)
+        const sourcePrevNodes =
+          (Array.isArray(sourceNode.data?.prevNodes) &&
+            sourceNode.data?.prevNodes) ||
+          [];
+        // const sourcePrevNodes = sourceNode.data?.prevNodes || [];
+
+        targetNode.data.prevNodes = [...sourcePrevNodes, sourceId];
+
+        if (Array.isArray(sourceNode.data?.childNodes)) {
+          sourceNode.data.childNodes.push(targetId);
+        }
+      } else {
+        console.warn("source or target node not found");
+      }
+    },
     resetWorkSpace: () => {
       return initialState;
     },
@@ -120,5 +165,6 @@ export const {
   setSelectedEdge,
   updateSelectedEdge,
   removeEdge,
+  getPrevNodes,
 } = nodesSlice.actions;
 export default nodesSlice.reducer;

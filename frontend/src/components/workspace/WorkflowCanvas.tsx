@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import {
   addNode,
+  getPrevNodes,
   setEdges,
   setNodes,
   setSelectedEdge,
@@ -48,7 +49,7 @@ export default function WorkflowCanvas() {
     (store: RootState) => store.nodes
   );
   const { screenToFlowPosition } = useReactFlow(); // Drop nodes at correct place
-
+console.log(nodes)
   const onNodesChange: OnNodesChange = (changes) => {
     // drag nodes
     dispatch(setNodes(applyNodeChanges(changes, nodes)));
@@ -72,6 +73,10 @@ export default function WorkflowCanvas() {
 
   const onConnect = useCallback(
     (params: Connection) =>
+     { 
+      dispatch(
+        getPrevNodes([params.source,params.target])
+      )
       dispatch(
         setEdges(
           addEdge(
@@ -79,7 +84,7 @@ export default function WorkflowCanvas() {
             edges
           )
         )
-      ),
+      )},
     [edges]
   );
 
@@ -93,7 +98,7 @@ export default function WorkflowCanvas() {
       id: id,
       type: nodeType.type,
       position: { x: position.x, y: position.y },
-      data: { ...nodeType, id: id },
+      data: { ...nodeType, id: id,prevNodes:[],childNodes:[] },
     };
     dispatch(addNode(node));
   };

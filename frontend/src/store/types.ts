@@ -4,6 +4,9 @@ export type Data={
     id:string
     label:string
     description:string
+    prevNodes:Node[] | unknown
+    childNodes:Node[] | unknown
+    prevNode?:string
     bgColor?: string;
     textColor?: string;
 } 

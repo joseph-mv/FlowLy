@@ -21,12 +21,12 @@ const StartNode: React.FC = () => {
         position={Position.Right}
         className="!bg-white !border-black"
       />
-      <Handle
+      {/* <Handle
         id="source-bottom"
         type="source"
         position={Position.Bottom}
         className="!bg-white !border-black"
-      />
+      /> */}
     </>
   );
 };

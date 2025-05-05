@@ -16,7 +16,7 @@ const ProcessNode: React.FC = () => {
 
       {/* Input Handles */}
       <Handle id="target-top" type="target" position={Position.Top} className="bg-white" />
-      <Handle id='target-left' type="target" position={Position.Left} className="bg-white" />
+      {/* <Handle id='target-left' type="target" position={Position.Left} className="bg-white" /> */}
       
        {/* Output Handles */}
       <Handle
